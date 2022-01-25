@@ -3,11 +3,11 @@
 int **initboard(int n)
 {
     /*
-    retourne la table du jeu qui est une matrice de n*n initialise avec des 0 
-    qui indiquent qu'aucune case de la table n'est attaquée initialement, si une 
-    case est négative |case| indique le nombre de reines sur la table qui attaque 
-    la case, si une case est positive ça indique qu'une raine est dans cette 
-    case.
+    returns the game table which is an n*n matrix initialized with 0s
+    which indicate that no box of the table is attacked initially, if a
+    case is negative |case| indicates the number of queens on the table that is attacking
+    box, if a box is positive it indicates that a groove is in this
+    box.
     */
     int **board = (int **)malloc(n * sizeof(int *));
     for (int i = 0; i < n; i++)
@@ -26,7 +26,7 @@ int **initboard(int n)
 void printboard(int **board, int n)
 {
     /*
-    affiche la table du jeu (board)
+    displays the game table (board)
     */
     for (int i = 0; i < n; i++)
     {
@@ -49,8 +49,8 @@ void printboard(int **board, int n)
 void placeQueen(int **board, int n, int position)
 {
     /*
-      place une reine en position 'position' de la table du jeu (board) et 
-      soustrait 1 à toutes les positions attaquées par cette reine.
+      places a queen in position 'position' of the game table (board) and
+      subtracts 1 from all positions attacked by this queen.
     */
     int posx = position % n, posy = position / n;
     board[posy][posx] = position + 1;
@@ -92,9 +92,9 @@ void placeQueen(int **board, int n, int position)
 void removeQueen(int **board, int n, int position)
 {
     /*
-     supprime la reine dans la position 'position' 
-     et ajoute 1 à toutes les positions précisément attaquées 
-     par cette reine
+     removes the queen in position 'position'
+     and adds 1 to all precisely attacked positions
+     by this queen
     */
     int posx = position % n, posy = position / n;
     board[posy][posx] = 0;
@@ -136,14 +136,14 @@ void removeQueen(int **board, int n, int position)
 int getNPthNotAttackedPosition(int **board, int n, int NP)
 {
     /*
-    retourne la NP eme position non attaque dans la 
-    table du jeu (board), si on utilise cette fonction 
-    pour trouver les solutions, l'algorithme trouvera 
-    toutes les solutions possibles y compris la permutation 
-    des reines qui conduira à une complexité tomporelle supérieure à n! ,
-    mais nous savons que si nous trouvons une solution et changeons 
-    la position des reines, cela conduira à la même solution,
-    la fonction suivante (getNPthNotAttackedPositionOfLine) éliminera la permutation entre les reines.
+    returns the NP th position not attacked in the
+    game table (board), if this function is used
+    to find the solutions, the algorithm will find
+    all possible solutions including permutation
+    queens which will lead to a tomporal complexity of n^n ,
+    but we know that if we find a solution and change
+    the position of the queens, this will lead to the same solution,
+    the following function (getNPthNotAttackedPositionOfLine) will eliminate swapping between queens.
     */
     for (int position = 0; position < n * n; position++)
     {
@@ -161,11 +161,11 @@ int getNPthNotAttackedPosition(int **board, int n, int NP)
 int getNPthNotAttackedPositionOfLine(int **board, int n, int NP,int line)
 {
    /*
-   retourne la NP eme position non attaque dans la ligne 'line' de la table du jeu (board),
-   dans cette fonction nous utilisons le fait que si une solution existe chaque reine est 
-   placée dans une ligne différente des autres reines ( si deux reines sont dans la même ligne elles s'attaquent ),
-   ce qui limitera la recherche à ne pas explorer la permutation de reines (une reine peut être placée sur une seule 
-   ligne dans toutes les solutions).
+   returns the NP th position not attacked in the line 'line' of the game table (board),
+   in this function we use the fact that if a solution exists each queen is
+   placed in a line different from the other queens (if two queens are in the same line they attack each other),
+   which will limit the search not to explore the permutation of queens (a queen can be placed on a single
+   row in all solutions).
    */
     for (int position = 0; position < n; position++)
     {
@@ -183,8 +183,8 @@ int getNPthNotAttackedPositionOfLine(int **board, int n, int NP,int line)
 int checkSolution(int* poses,int n)
 {
     /*
-    vérifier si une solution est valide, cette fonction n'est pas utilisée dans la recherche 
-    d'une manière directe ,la vérification de la validite se fait avant de placer une reine dans notre solution.
+    check if a solution is valid, this function is not used in search
+    in a direct way, the validity check is done before placing a queen in our solution.
     */
     int **board = initboard(n);
     int x,y;
@@ -210,16 +210,16 @@ int checkSolution(int* poses,int n)
     return 1;
 }
 /*
-Pour trouver une solution nous utiliserons trois composants , 
-la table du jeu (board), une table qui tiendra la position des reines dans 
-la table du jeu (poses), une table (state) qui contient pour chaque reine les 
-NP qui indiquent la place prise entre les places disponibles après que les reines 
-précédentes aient été placées sur la table du jeu.
+To find a solution we will use three components,
+the game table (board), a table that will hold the position of the queens in
+the game table (poses), a table (state) which contains for each queen the
+NP which indicate the place taken between the places available after the queens
+previous ones have been placed on the game table.
 */
 void getFirstSolution(int n)
 {
     /*
-    trouve et affiche la première solution si elle existe.
+     finds and displays the first solution if it exists.
     */
     int poses[n], state[n], pos = 0, i = 0;
     int **board = initboard(n);
@@ -228,32 +228,32 @@ void getFirstSolution(int n)
         state[i] = 1;
     }
     i = 0;
-    while (i < n) // tant qu'on n'a pas placé toutes les reines
+    while (i < n) // as long as we haven't placed all the queens
     {
-        pos = getNPthNotAttackedPosition(board, n, state[i]); // isi , l'utilisation de getNPthNotAttackedPositionOfLine va mener au meme resultat
-        if (pos == -1) /* blockage !,
-        nous notons que l'utilisation de cette condition 
-        et de la fonction ci-dessus pour trouver la position éliminera 
-        le besoin de vérifier si après avoir placé la reine la solution 
-        est valide car nous ne plaçons la reine que si la position n'est 
-        pas attaquée si elle est attaquée pos sera égal à -1.
+        pos = getNPthNotAttackedPosition(board, n, state[i]); 
+        if (pos == -1) /* blockage!,
+        we note that the use of this condition
+        and the above function to find the position will eliminate
+        the need to check if after placing the queen the solution
+        is valid because we only place the queen if the position is not
+        not attacked if attacked pos will be -1.
         */
         {
             /*
-            dans ce cas la reine ne peut pas être mise à la position désirée (NP eme position n'est pas disponible) 
-            ce qui signifie que tous les NP plus grands que le NP actuel sont automatiquement éliminés (si on ne peut pas 
-            placer une reine dans la NP eme position disponible car le les positions disponibles sont inférieures à NP nous ne pouvons pas 
-            la placer dans la NP+1 eme position) et donc on remet NP à 1 et on change la position de la reine précédente
+            in this case the queen cannot be put in the desired position (NP th position is not available)
+            which means that all NPs larger than the current NP are automatically eliminated (if we cannot
+            place a queen in the NP th available position because the available positions are lower than NP we cannot
+            place it in the NP+1 th position) and therefore we reset NP to 1 and we change the position of the previous queen
             */
             state[i] = 1;
             i--;
             if (i < 0)
             {
                 /*
-                ici, l'algorithme a essayé toutes les positions possibles et a 
-                conclu que si nous voulons trouver une solution valide, nous devons 
-                changer la position de la reine -1 ce qui n'est pas logique donc il n'y a pas 
-                de solution.
+                here the algorithm has tried all possible positions and has
+                concluded that if we want to find a valid solution, we must
+                change the position of the queen -1 which does not make sense so there is no
+                of solution.
                 */
                 printf("pas de solu ! \n");
                 return;
@@ -264,7 +264,7 @@ void getFirstSolution(int n)
         else
         {
             /*
-            on peut plasser la reine dans la position désirée (pos)
+             we can place the queen in the desired position (pos)
             */
             poses[i] = pos;
             placeQueen(board, n, pos);
@@ -285,7 +285,7 @@ void getFirstSolution(int n)
 int* getFirstSolutionVect(int n)
 {
     /*
-    trouve et retourne la première solution si elle existe.
+     finds and returns the first solution if it exists.
     */
     int *poses = malloc(n*sizeof(int)), state[n], pos = 0, i = 0;
     int **board = initboard(n);
@@ -294,32 +294,32 @@ int* getFirstSolutionVect(int n)
         state[i] = 1;
     }
     i = 0;
-    while (i < n) // tant qu'on n'a pas placé toutes les reines
+    while (i < n) // as long as we haven't placed all the queens
     {
         pos = getNPthNotAttackedPositionOfLine(board, n, state[i],i); // isi , l'utilisation de getNPthNotAttackedPositionOfLine va mener au meme resultat
-        if (pos == -1) /* blockage !,
-        nous notons que l'utilisation de cette condition 
-        et de la fonction ci-dessus pour trouver la position éliminera 
-        le besoin de vérifier si après avoir placé la reine la solution 
-        est valide car nous ne plaçons la reine que si la position n'est 
-        pas attaquée si elle est attaquée pos sera égal à -1.
+        if (pos == -1) /* blockage!,
+        we note that the use of this condition
+        and the above function to find the position will eliminate
+        the need to check if after placing the queen the solution
+        is valid because we only place the queen if the position is not
+        not attacked if attacked pos will be -1.
         */
         {
             /*
-            dans ce cas la reine ne peut pas être mise à la position désirée (NP eme position n'est pas disponible) 
-            ce qui signifie que tous les NP plus grands que le NP actuel sont automatiquement éliminés (si on ne peut pas 
-            placer une reine dans la NP eme position disponible car le les positions disponibles sont inférieures à NP nous ne pouvons pas 
-            la placer dans la NP+1 eme position) et donc on remet NP à 1 et on change la position de la reine précédente
+            in this case the queen cannot be put in the desired position (NP th position is not available)
+            which means that all NPs larger than the current NP are automatically eliminated (if we cannot
+            place a queen in the NP th available position because the available positions are lower than NP we cannot
+            place it in the NP+1 th position) and therefore we reset NP to 1 and we change the position of the previous queen
             */
             state[i] = 1;
             i--;
             if (i < 0)
             {
                 /*
-                ici, l'algorithme a essayé toutes les positions possibles et a 
-                conclu que si nous voulons trouver une solution valide, nous devons 
-                changer la position de la reine -1 ce qui n'est pas logique donc il n'y a pas 
-                de solution.
+                here the algorithm has tried all possible positions and has
+                concluded that if we want to find a valid solution, we must
+                change the position of the queen -1 which does not make sense so there is no
+                of solution.
                 */
                 printf("pas de solu ! \n");
                 return NULL;
@@ -330,7 +330,7 @@ int* getFirstSolutionVect(int n)
         else
         {
             /*
-            on peut plasser la reine dans la position désirée (pos)
+             we can place the queen in the desired position (pos)
             */
             poses[i] = pos;
             placeQueen(board, n, pos);
@@ -349,36 +349,36 @@ int getNbSolutionsOfNQueen(int n)
         state[i] = 1;
     }
     i = 0;
-    while (i < n) // on a pas trouver tous les solutions
+    while (i < n) // we haven't found all the solutions
     {
         pos = getNPthNotAttackedPositionOfLine(board, n, state[i],i); 
         /* 
-        isi , l'utilisation de getNPthNotAttackedPosition va mener a trouver
-        toutes les permutation des solutions possibles qui conduira à une complexité 
-        tomporelle supérieure à n!
+        here , using getNPthNotAttackedPosition will lead to finding
+        all permutations of possible solutions that will lead to complexity
+        n^n tomporelle
         */
-        if (pos == -1) /* blockage !,
-        nous notons que l'utilisation de cette condition 
-        et de la fonction ci-dessus pour trouver la position éliminera 
-        le besoin de vérifier si après avoir placé la reine la solution 
-        est valide car nous ne plaçons la reine que si la position n'est 
-        pas attaquée si elle est attaquée pos sera égal à -1.
+        if (pos == -1) /* blockage!,
+        we note that the use of this condition
+        and the above function to find the position will eliminate
+        the need to check if after placing the queen the solution
+        is valid because we only place the queen if the position is not
+        not attacked if attacked pos will be -1.
         */
         {
             /*
-            dans ce cas la reine ne peut pas être mise à la position désirée (NP eme position n'est pas disponible) 
-            ce qui signifie que tous les NP plus grands que le NP actuel sont automatiquement éliminés (si on ne peut pas 
-            placer une reine dans la NP eme position disponible car le les positions disponibles sont inférieures à NP nous ne pouvons pas 
-            la placer dans la NP+1 eme position) et donc on remet NP à 1 et on change la position de la reine précédente
+            in this case the queen cannot be put in the desired position (NP th position is not available)
+            which means that all NPs larger than the current NP are automatically eliminated (if we cannot
+            place a queen in the NP th available position because the available positions are lower than NP we cannot
+            place it in the NP+1 th position) and therefore we reset NP to 1 and we change the position of the previous queen
             */
             state[i] = 1;
             i--;
             if (i < 0)
             {
                 /*
-                ici, l'algorithme a essayé toutes les positions possibles partant de la derniere solution et a 
-                conclu que si nous voulons trouver une solution valide, nous devons 
-                changer la position de la reine -1 ce qui n'est pas logique donc on a trouver tous les solution.
+                here, the algorithm has tried all possible positions starting from the last solution and has
+                concluded that if we want to find a valid solution, we must
+                change the position of the queen -1 which is not logical so we have found all the solutions.
                 */
                 return nbsolu;
             }
@@ -388,7 +388,7 @@ int getNbSolutionsOfNQueen(int n)
         else
         {
             /*
-            on peut plasser la reine dans la position désirée (pos)
+             we can place the queen in the desired position (pos)
             */
             poses[i] = pos;
             placeQueen(board, n, pos);
@@ -396,9 +396,9 @@ int getNbSolutionsOfNQueen(int n)
         }
         if (i >= n) 
         /* 
-        si nous avons trouvé une solution nous essayons
-        de trouver la prochaine solution on changant le NP de 
-        la dernière reine
+        if we found a solution we try
+        to find the next solution by changing the NP of
+        the last queen
         */
         {
             i--;

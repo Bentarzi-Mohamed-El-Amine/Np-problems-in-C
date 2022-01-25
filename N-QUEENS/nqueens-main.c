@@ -38,7 +38,7 @@ void writeBestVerF(int n, long long ExecTime)
 
 void initWorseFirsSolve()
 {
-    worseFirsSolve = fopen("Resolution_Une_Solution.csv", "w+");
+    worseFirsSolve = fopen("Resolution_One_Solution.csv", "w+");
     fprintf(worseFirsSolve, "N; ExecTime (ns) \n");
 }
 
@@ -49,7 +49,7 @@ void writeWorseFirsSolve(int n, long long ExecTime)
 
 void initSpatialVerification()
 {
-    worseFirsSolve = fopen("Resolution_Une_Solution_space.csv", "w+");
+    worseFirsSolve = fopen("Resolution_One_Solution_space_usage.csv", "w+");
     fprintf(worseFirsSolve, "N; space (octet) \n");
 }
 
